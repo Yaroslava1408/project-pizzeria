@@ -69,11 +69,17 @@
 
       /* generate HTML based on template */
 
-      /* create element using utils.createElementFromHTML */
+      const generatedHTML = templates.menuProduct(thisProduct.data);
       
-      /*find menu container */
+      /* create element using utils.createElementFromHTML */
+
+    thisProduct.element = utils.createDOMFromHTML (generatedHTML);
+      
+      /* find menu container */
+      const menuContainer = document.querySelector (select.containerOf.menu);
 
       /* add element to menu */
+      menuContainer.appendChild (thisProduct.element);
       
     }
    

@@ -1,5 +1,7 @@
 /* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
 
+//const { active } = require('browser-sync');
+
 {
   'use strict';
 
@@ -60,8 +62,10 @@
       thisProduct.data = data;
 
       thisProduct.renderInMenu();
+      thisProduct.initAccordion();
 
       console.log ('new Product:', thisProduct);
+      
     }
     
     renderInMenu(){
@@ -73,7 +77,7 @@
       
       /* create element using utils.createElementFromHTML */
 
-    thisProduct.element = utils.createDOMFromHTML (generatedHTML);
+      thisProduct.element = utils.createDOMFromHTML (generatedHTML);
       
       /* find menu container */
       const menuContainer = document.querySelector (select.containerOf.menu);
@@ -82,9 +86,56 @@
       menuContainer.appendChild (thisProduct.element);
       
     }
-   
-  }
 
+    initAccordion(){
+      const thisProduct = this;
+  
+      /* find the clickable trigger (the element that should react to clicking) */
+      
+      const clickableTriggers = document.querySelectorAll (select.menuProduct.clickable);
+      console.log ('show me', clickableTriggers); 
+      
+      for (const clickableTrigger of clickableTriggers) {
+      /* START: add event listener to clickable trigger on event click */
+        clickableTrigger.addEventListener ('click', function(event) {
+          /* prevent default action for event */
+          event.preventDefault();      
+    
+          /* find active product (product that has active class) */
+          const activeProduct = document.querySelectorAll (select.all.menuProductsActive);
+          //console.log ('list of', activeProduct); 
+        
+          
+          /* if there is active product and it's not thisProduct.element, remove class active from it */
+                      
+          //for (let activeLink of activeProduct){
+          //if ( activeLink == null){
+          //activeLink.classList.remove(classNames.menuProduct.wrapperActive);
+          //}
+          //}
+
+          if (activeProduct == thisProduct.element && activeProduct !==null){
+        
+            activeProduct.classList.remove(classNames.menuProduct.wrapperActive);
+          }
+        
+          
+             
+         
+          /* toggle active class on thisProduct.element */
+          thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
+        });
+      }
+    }
+  }
+  
+
+  
+
+  
+   
+  
+ 
 
   const app = {
     initMenu: function (){

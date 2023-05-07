@@ -197,9 +197,7 @@
           // determite option image
 
           const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
-          console.log ('olives',optionImage);
-
-
+          
           // check if there is param with a name of paramId in formData and if it includes optionId
           const optionSelected = formData[paramId] && formData[paramId].includes(optionId);          
                 

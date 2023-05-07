@@ -55,6 +55,7 @@
   };
 
   class Product {
+
     constructor (id, data){
       const thisProduct = this;
 
@@ -193,61 +194,53 @@
           const option = param.options[optionId];
           console.log(optionId, option);
 
-          // check if there is param with a name of paramId in formData and if it includes optionId
-          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+          // determite option image
 
-          
-                    
-          // check if the option is not default
-          //if (option.price !== price) {
-          // add option price to price variable
-          //let finalPrice = option.price + price;
-          //console.log ('higher price', finalPrice);
-              
-          //console.log ('final price', finalPrice);   
-          //console.log ('option price', option.price);  //  
-          //}
-          //} else {
-          // check if the option is default
-          //if(option.price !== price) {
-          // reduce price variable
-          //let finalPrice = price - option.price;
-          //console.log ('price reduced', finalPrice);
-          //}
-          //}
-          //}      
-        
+          const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+          console.log ('olives',optionImage);
+
+
+          // check if there is param with a name of paramId in formData and if it includes optionId
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);          
+                
           // check if the option is not default
           if (optionSelected) {
-            if( !option.default) {
-            // add option price to price variable             
+            // check if the option is not default
+            if (!option.default) {
+              // add option price to price variable
               price = price + option.price;
-            } else {
+            }
+          } else {
             // check if the option is default
-              if(option.default){                                     
-                // reduce price variable
-                price = price - option.price;
-             
-              }
+            if (option.default) {
+              // reduce price variable
+              price = price - option.price;
             }
           }
+
+          if(optionImage) {
+            
+            if(optionSelected) {
+              optionImage.classList.add(classNames.menuProduct.imageVisible);
+            } else {
+              optionImage.classList.remove(classNames.menuProduct.imageVisible);
+            }
+          }
+             
         }
-           
-              
-        // update calculated price in the HTML
+      } 
+             
+      // update calculated price in the HTML
       
-        thisProduct.priceElem.innerHTML = price;           
+      thisProduct.priceElem.innerHTML = price;           
       
-      }
-
-    }
-    //const optionImage = thisProduct.imageWrapper.querySelector(dataSource.products.images);
-    //console.log (optionImage);
-
-  }
-
+    } 
+  }  
+   
   
-  
+
+      
+   
 
      
 

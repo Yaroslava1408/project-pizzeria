@@ -69,8 +69,9 @@
       thisProduct.initAccordion();
 
       thisProduct.initOrderForm ();
+      thisProduct.initAmountWidget();
       thisProduct.processOrder ();
-
+   
       console.log ('new Product:', thisProduct);
       
     }
@@ -105,6 +106,7 @@
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
 
       thisProduct.imageWrapper = thisProduct.element.querySelector (select.menuProduct.imageWrapper);
+      thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
     }
 
     initAccordion(){
@@ -115,7 +117,6 @@
       //const clickableTriggers = document.querySelectorAll (select.menuProduct.clickable);
       //console.log ('show me', clickableTriggers); 
       
-      //for (const clickableTrigger of clickableTriggers) {
       /* START: add event listener to clickable trigger on event click */
       thisProduct.accordionTrigger.addEventListener ('click', function(event) {
         /* prevent default action for event */
@@ -127,29 +128,17 @@
         
           
         /* if there is active product and it's not thisProduct.element, remove class active from it */
-                      
-        //for (let activeLink of activeProduct){
-        //if ( activeLink == null){
-        //activeLink.classList.remove(classNames.menuProduct.wrapperActive);
-        //}
-        //}
-
-        //if (activeProduct == thisProduct.element && activeProduct !==null){
-        
-        //activeProduct.classList.remove(classNames.menuProduct.wrapperActive);
-        //}
-        if (activeProduct == thisProduct.element && activeProduct !==null) {
+        if (activeProduct ==null && activeProduct !== thisProduct.element ) {
           activeProduct.classList.remove(classNames.menuProduct.wrapperActive);
-        }
-        
-         
-         
+        }     
+                  
         /* toggle active class on thisProduct.element */
         thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
-      });
+      }
+      );
     }
-
-
+  
+    
     initOrderForm () {
       const thisProduct = this;
       console.log ('initOrderForm');
@@ -233,11 +222,24 @@
       thisProduct.priceElem.innerHTML = price;           
       
     } 
-  }  
-   
-  
 
+    initAmountWidget() {
+      const thisProduct = this;
+      thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+    }
+  
+  }
+
+
+  class AmountWidget {
+    constructor (element) {
+      const thisWidget = this;
       
+      console.log ('AmountWidget:', thisWidget);
+      console.log ('constructor arguments:', element);
+    }
+  }
+   
    
 
      

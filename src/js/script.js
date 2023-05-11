@@ -1,4 +1,4 @@
-/* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
+/* global Handlebars, utils, dataSource */ //eslint-disable-line no-unused-vars
 
 //const { active } = require('browser-sync');
 
@@ -68,9 +68,9 @@
 
       thisProduct.initAccordion();
 
-      thisProduct.initOrderForm ();
+      thisProduct.initOrderForm();
       thisProduct.initAmountWidget();
-      thisProduct.processOrder ();
+      thisProduct.processOrder();
                
       console.log ('new Product:', thisProduct);
       
@@ -106,7 +106,10 @@
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
 
       thisProduct.imageWrapper = thisProduct.element.querySelector (select.menuProduct.imageWrapper);
-      thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
+      thisProduct.AmountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
+      console.log ('widget', thisProduct.AmountWidgetElem);
+      
+    
     }
 
     initAccordion(){
@@ -216,6 +219,9 @@
              
         }
       } 
+
+      /* multiply price by amount */
+      price *= thisProduct.amountWidget.value;
              
       // update calculated price in the HTML
       
@@ -225,7 +231,11 @@
 
     initAmountWidget() {
       const thisProduct = this;
-      thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);  
+      thisProduct.amountWidget = new AmountWidget(thisProduct.AmountWidgetElem);
+      thisProduct.AmountWidgetElem.addEventListener ('updated', function () {
+        thisProduct.processOrder();
+      });
+      
     }
   }
    
@@ -242,6 +252,7 @@
       thisWidget.setValue(thisWidget.input.value);
       thisWidget.initActions();
       
+      
     }
    
     getElements(element) {
@@ -254,7 +265,7 @@
       thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
       
     } 
-  
+
 
     setValue (value) {
       const thisWidget = this;
@@ -263,38 +274,39 @@
               
 
       /* TODO: Add validation */
-      if(thisWidget.value !== newValue && !isNaN(newValue) && newValue <= settings.amountWidget.defaultMax && value >= settings.amountWidget.defaultMin) {
+      if (thisWidget.value !== newValue && !isNaN(newValue)
+        && newValue <= settings.amountWidget.defaultMax && newValue >= settings.amountWidget.defaultMin) {
         thisWidget.value = newValue;      
         console.log ('new written value', newValue);
+        thisWidget.announce();       
       }
-         
+              
     }
-   
-  
+     
     
     initActions () {
       const thisWidget = this;
 
       thisWidget.input.addEventListener ('change', function () {
-        thisWidget.setValue(thisWidget.input.value);
-              
+        thisWidget.setValue(thisWidget.input.value);       
+                     
       });
-  
+
 
       thisWidget.linkDecrease.addEventListener('click', function (event){
         event.preventDefault();
         thisWidget.setValue(thisWidget.value - 1);
-        console.log ('decrease', thisWidget.value - 1);
-        
+        console.log ('decrease', thisWidget.value  - 1);               
       });  
 
       thisWidget.linkIncrease.addEventListener ('click', function (event){
         event.preventDefault();
-        thisWidget.setValue(thisWidget.value + 1 );
-        console.log ('increase', thisWidget.value + 1);
+        thisWidget.setValue(thisWidget.value  + 1 );
+        console.log ('increase', thisWidget.value  + 1);
         
       });
-      
+     
+        
     }
 
     announce() {

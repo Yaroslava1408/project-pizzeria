@@ -141,10 +141,9 @@
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
 
       thisProduct.imageWrapper = thisProduct.element.querySelector (select.menuProduct.imageWrapper);
-      thisProduct.AmountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
+      thisProduct.dom.AmountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
       console.log ('widget', thisProduct.AmountWidgetElem);
-      
-    
+        
     }
 
     initAccordion(){
@@ -156,7 +155,7 @@
       //console.log ('show me', clickableTriggers); 
       
       /* START: add event listener to clickable trigger on event click */
-      thisProduct.accordionTrigger.addEventListener ('click', function(event) {
+      thisProduct.dom.accordionTrigger.addEventListener ('click', function(event) {
         /* prevent default action for event */
         event.preventDefault();      
     
@@ -179,7 +178,7 @@
     
     initOrderForm () {
       const thisProduct = this;
-      console.log ('initOrderForm');
+      //console.log ('initOrderForm');
 
       thisProduct.form.addEventListener('submit', function(event){
         event.preventDefault();
@@ -195,6 +194,7 @@
       thisProduct.cartButton.addEventListener('click', function(event){
         event.preventDefault();
         thisProduct.processOrder();
+        thisProduct.addToCart();
       });
     }
     
@@ -204,7 +204,7 @@
           
       // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
       const formData = utils.serializeFormToObject(thisProduct.form);
-      console.log('formData', formData);
+      //console.log('formData', formData);
     
       // set price to default price
       let price = thisProduct.data.price;
@@ -213,7 +213,7 @@
       for(let paramId in thisProduct.data.params) {
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
-        console.log(paramId, param);
+        //console.log(paramId, param);
     
         // for every option in this category
         for(let optionId in param.options) {
@@ -255,12 +255,14 @@
         }
       } 
 
+      thisProduct.priceSingle = price;
+
       /* multiply price by amount */
       price *= thisProduct.amountWidget.value;
              
       // update calculated price in the HTML
       
-      thisProduct.priceElem.innerHTML = price;           
+      thisProduct.dom.priceElem.innerHTML = price;           
       
     } 
 
@@ -273,8 +275,32 @@
       });
       
     }
-  }
-   
+
+    addToCart () {
+      const thisProduct = this;
+      //app.cart.add(thisProduct.prepareCartProduct);
+    
+    }
+
+    prepareCartProduct () {
+      const thisProduct = this;
+
+      const productSummary = {
+
+        id: thisProduct.id,
+        name: thisProduct.data.name,
+        amount: thisProduct.amountWidget.value,
+        priceSingle: thisProduct.priceSingle,
+        price: thisProduct.priceSingle * thisProduct.amountWidget.value,
+        //params: ,       
+                
+      };
+      return productSummary; 
+
+        
+    }
+
+  }   
 
 
   class AmountWidget {
@@ -390,6 +416,11 @@
       });
     }
 
+    add (menuProduct){
+      const thisCart = this;
+
+      console.log  ('adding product', menuProduct);
+    }
   }
 
   
@@ -435,6 +466,7 @@
 
   app.init();
   app.initCart(); 
+   
 }
 
 

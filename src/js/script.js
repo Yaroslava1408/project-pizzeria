@@ -141,7 +141,7 @@
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
 
       thisProduct.imageWrapper = thisProduct.element.querySelector (select.menuProduct.imageWrapper);
-      thisProduct.dom.AmountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
+      thisProduct.AmountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
       console.log ('widget', thisProduct.AmountWidgetElem);
         
     }
@@ -155,7 +155,7 @@
       //console.log ('show me', clickableTriggers); 
       
       /* START: add event listener to clickable trigger on event click */
-      thisProduct.dom.accordionTrigger.addEventListener ('click', function(event) {
+      thisProduct.accordionTrigger.addEventListener ('click', function(event) {
         /* prevent default action for event */
         event.preventDefault();      
     
@@ -262,7 +262,7 @@
              
       // update calculated price in the HTML
       
-      thisProduct.dom.priceElem.innerHTML = price;           
+      thisProduct.priceElem.innerHTML = price;           
       
     } 
 
@@ -276,30 +276,61 @@
       
     }
 
-    addToCart () {
-      const thisProduct = this;
-      //app.cart.add(thisProduct.prepareCartProduct);
+    // addToCart () {
+    //   const thisProduct = this;
+    //   //app.cart.add(thisProduct.prepareCartProduct);
     
-    }
+    // }
 
-    prepareCartProduct () {
+    addToCart() {
       const thisProduct = this;
+      
+      app.cart.add(thisProduct.prepareCartProduct());
+    }
+  
 
+    prepareCartProduct() {
+      const thisProduct = this;
       const productSummary = {
-
         id: thisProduct.id,
         name: thisProduct.data.name,
         amount: thisProduct.amountWidget.value,
         priceSingle: thisProduct.priceSingle,
         price: thisProduct.priceSingle * thisProduct.amountWidget.value,
-        //params: ,       
-                
+        params: thisProduct.prepareCartProductParams(),
       };
-      return productSummary; 
-
-        
+      return productSummary;
     }
-
+    prepareCartProductParams() {
+      const thisProduct = this;
+    
+      const formData = utils.serializeFormToObject(thisProduct.form);
+      const params = {};
+    
+      // for very category (param)
+      for(let paramId in thisProduct.data.params) {
+        const param = thisProduct.data.params[paramId];
+    
+        // create category param in params const eg. params = { ingredients: { name: 'Ingredients', options: {}}}
+        params[paramId] = {
+          label: param.label,
+          options: {}
+        };
+    
+        // for every option in this category
+        for(let optionId in param.options) {
+          const option = param.options[optionId];
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+    
+          if(optionSelected) {
+            // option is selected!
+            params[paramId].options[optionId] = option.label;
+          }
+        }
+      }
+    
+      return params;
+    }
   }   
 
 
@@ -337,15 +368,15 @@
               
 
       /* TODO: Add validation */
-      if (thisWidget.value != newValue && !isNaN(newValue)) {
-        //&& newValue <= settings.amountWidget.defaultMax && newValue >= settings.amountWidget.defaultMin) {
+      if (thisWidget.value != newValue && !isNaN(newValue) 
+        && newValue <= settings.amountWidget.defaultMax && newValue >= settings.amountWidget.defaultMin) {
         thisWidget.value = newValue;      
         console.log ('new written value', newValue);
         thisWidget.announce();     
        
       }   
 
-      // thisWidget.AmountWidgetElem.innerHTML = newValue;
+      //thisWidget.AmountWidgetElem.innerHTML = newValue;
   
     }
     

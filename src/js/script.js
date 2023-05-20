@@ -276,12 +276,6 @@
       
     }
 
-    // addToCart () {
-    //   const thisProduct = this;
-    //   //app.cart.add(thisProduct.prepareCartProduct);
-    
-    // }
-
     addToCart() {
       const thisProduct = this;
       
@@ -301,6 +295,7 @@
       };
       return productSummary;
     }
+
     prepareCartProductParams() {
       const thisProduct = this;
     
@@ -437,6 +432,8 @@
 
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
 
+      thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
+
     }
 
     initActions (){
@@ -450,7 +447,19 @@
     add (menuProduct){
       const thisCart = this;
 
-      console.log  ('adding product', menuProduct);
+      //console.log  ('adding product', menuProduct);
+    
+      /* generate HTML based on template */
+
+      const generatedHTML = templates.cartProduct(menuProduct);
+      
+      /* create DOM using utils.createElementFromHTML */
+
+      const generatedDOM = utils.createDOMFromHTML (generatedHTML);
+      
+      /* add the element to cart */
+      thisCart.dom.productList.appendChild (generatedDOM);
+      
     }
   }
 

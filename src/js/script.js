@@ -358,23 +358,26 @@
 
     setValue (value) {
       const thisWidget = this;
-
       const newValue = parseInt(value);
+      //thisWidget.value = newValue;
+      
+      //thisWidget.input.value = thisWidget.value;
               
 
       /* TODO: Add validation */
       if (thisWidget.value != newValue && !isNaN(newValue) 
         && newValue <= settings.amountWidget.defaultMax && newValue >= settings.amountWidget.defaultMin) {
-        thisWidget.value = newValue;      
+        thisWidget.value = newValue;
+        thisWidget.input.value = thisWidget.value;           
         console.log ('new written value', newValue);
-        thisWidget.announce();     
+        thisWidget.announce();   
        
-      }   
+      }  
+    }      
+       
 
-      //thisWidget.AmountWidgetElem.innerHTML = newValue;
   
-    }
-    
+       
     
 
     initActions () {
@@ -388,14 +391,14 @@
 
       thisWidget.linkDecrease.addEventListener('click', function (event){
         event.preventDefault();
-        thisWidget.setValue(thisWidget.value - 1);
-        console.log ('decrease', thisWidget.value  - 1);               
+        thisWidget.setValue(thisWidget.value -1);
+        console.log ('decrease', thisWidget.value);               
       });  
 
       thisWidget.linkIncrease.addEventListener ('click', function (event){
         event.preventDefault();
-        thisWidget.setValue(thisWidget.value  + 1 );
-        console.log ('increase', thisWidget.value  + 1);
+        thisWidget.setValue(thisWidget.value +1 );
+        console.log ('increase', thisWidget.value);
               
       });
               
@@ -508,7 +511,6 @@
   app.initCart(); 
    
 }
-
 
 
 
